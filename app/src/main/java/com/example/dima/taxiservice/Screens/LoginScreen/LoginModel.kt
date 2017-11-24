@@ -1,6 +1,6 @@
-package com.example.dima.taxiservice.LoginScreen
+package com.example.dima.taxiservice.Screens.LoginScreen
 
-import com.example.dima.taxiservice.Role
+import com.example.dima.taxiservice.Screens.Role
 
 /**
  * Created by Dima on 24.11.2017.

@@ -1,4 +1,4 @@
-package com.example.dima.taxiservice.LoginScreen;
+package com.example.dima.taxiservice.Screens.LoginScreen;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,8 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.dima.taxiservice.R;
-import com.example.dima.taxiservice.Role;
-import com.example.dima.taxiservice.UserScreen.UserActivity;
+import com.example.dima.taxiservice.Screens.OrderScreen.OrderView;
+import com.example.dima.taxiservice.Screens.Role;
+import com.example.dima.taxiservice.Screens.UserScreen.UserActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

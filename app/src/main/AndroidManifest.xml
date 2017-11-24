@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginScreen.LoginActivity"
+            android:name="com.example.dima.taxiservice.Screens.LoginScreen.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +44,8 @@
             android:value="@string/google_maps_key" />
 
 
-        <activity android:name=".UserScreen.UserActivity"></activity>
+        <activity android:name="com.example.dima.taxiservice.Screens.UserScreen.UserActivity"></activity>
+        <activity android:name="com.example.dima.taxiservice.Screens.OrderScreen.OrderView"></activity>
     </application>
 
 </manifest>

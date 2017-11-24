@@ -1,36 +1,25 @@
-package com.example.dima.taxiservice.UserScreen
+package com.example.dima.taxiservice.Screens.UserScreen
 
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import android.text.SpannableStringBuilder
-import com.akexorcist.googledirection.DirectionCallback
-import com.akexorcist.googledirection.model.Direction
-import com.example.dima.taxiservice.LoadingView
+import com.example.dima.taxiservice.Screens.LoadingView
 import com.example.dima.taxiservice.MapUtils.AddressAdapter
 import com.example.dima.taxiservice.MapUtils.LocationFinder
-import com.example.dima.taxiservice.MapUtils.MyGoogleDirection
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.CameraPosition
+import com.example.dima.taxiservice.Screens.MapView
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.maps.android.PolyUtil
 import java.util.*
 
 /**
  * Created by Dima on 24.11.2017.
  */
 
-interface IUserView:LoadingView, LocationFinder.Ifinder{
-    fun moveToLocation(location:LatLng,zoom:Float)
-    fun addMarker(location: LatLng,name: String?)
-    fun clearMap()
+interface IUserView: LoadingView,MapView, LocationFinder.Ifinder{
     fun setCurrentPlaceName(name:String)
     fun setTargetPlaceName(name:String)
-    fun buildPolyline(mPoints:List<LatLng>)
+    fun onOrderCreated(from:Pair<LatLng,Address>,to:Pair<LatLng,Address>)
 }
 interface IUserModel{
 
@@ -87,6 +76,7 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
 //                }
 //
 //            })
+            view.onOrderCreated(curMarker!!, tarMarker!!)
         }
     }
 

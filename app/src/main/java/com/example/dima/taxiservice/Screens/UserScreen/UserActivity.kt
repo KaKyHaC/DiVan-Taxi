@@ -1,27 +1,21 @@
-package com.example.dima.taxiservice.UserScreen
+package com.example.dima.taxiservice.Screens.UserScreen
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.location.Address
-import android.location.Geocoder
-import android.location.LocationManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.text.SpannableStringBuilder
 import android.widget.EditText
-import com.example.dima.taxiservice.MapUtils.AddressAdapter
-import com.example.dima.taxiservice.MapUtils.LocationFinder
 import com.example.dima.taxiservice.R
+import com.example.dima.taxiservice.Screens.OrderScreen.OrderView
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import java.util.*
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.PolylineOptions
@@ -128,6 +122,10 @@ class UserActivity : AppCompatActivity() , OnMapReadyCallback,IUserView {
         val latLngBounds = latLngBuilder.build()
         val track = CameraUpdateFactory.newLatLngBounds(latLngBounds, size, size, 25)
         mMap.moveCamera(track)
+    }
+
+    override fun onOrderCreated(from: Pair<LatLng, Address>, to: Pair<LatLng, Address>) {
+        startActivity(Intent(this,OrderView().javaClass))
     }
 }
 
