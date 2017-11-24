@@ -1,17 +1,26 @@
 package com.example.dima.taxiservice.Screens.OrderScreen
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.widget.EditText
 import android.widget.TextView
+import com.example.dima.taxiservice.MapUtils.AddressAdapter
+import com.example.dima.taxiservice.MapUtils.LocationFinder
 import com.example.dima.taxiservice.R
+import com.example.dima.taxiservice.Screens.UserScreen.UserPresenter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import java.util.*
 
 /**
  * Created by Dima on 24.11.2017.
@@ -46,6 +55,38 @@ class OrderView: AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isScrollGesturesEnabled=false
         mMap.uiSettings.isZoomGesturesEnabled=false
 //        buildPolyline(List(2,{index -> LatLng(index*455f.toDouble(),index*32f.toDouble()) }))
+        TestInit()
+    }
+
+    fun TestInit(){
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addressAdapter = AddressAdapter( geocoder, object :AddressAdapter.AddressListener{
+            override fun onAddressFinded(location: LatLng?, address: Address?, request: Int) {
+                if(location!=null&&address!=null) {
+                    mMap.addMarker(MarkerOptions().position(location).title(address.featureName))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,15f))
+                }
+            }
+        })
+        val locationFinder = LocationFinder(object :LocationFinder.LocationFinderListener{
+            override fun onSatusChange(s: String?) {
+            }
+
+            override fun onLocationFinded(location: Location?) {
+                location?.let {
+                    addressAdapter.findAddress(LatLng(location.latitude,location.longitude),0)
+                }
+            }
+
+        }, locationManager, UserPresenter.curAddressRequest)
+        locationFinder.startFinding(object :LocationFinder.Ifinder{
+            override fun getContext(): Context {
+                return this@OrderView
+            }
+            override fun requestPermissions(vararg permission: String?) {
+            }
+        })
     }
 
     fun buildPolyline(mPoints:List<LatLng>){

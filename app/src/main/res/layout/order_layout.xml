@@ -31,7 +31,7 @@
                 android:id="@+id/tvFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Начало маршрута" />
         </TableRow>
 
         <TableRow
@@ -48,7 +48,7 @@
                 android:id="@+id/tvTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Место назначения" />
         </TableRow>
 
         <TableRow
@@ -65,7 +65,7 @@
                 android:id="@+id/tvCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Стоимсоть поездки" />
         </TableRow>
 
         <TableRow
@@ -82,7 +82,7 @@
                 android:id="@+id/tvAtTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Время старта" />
         </TableRow>
     </TableLayout>
 
