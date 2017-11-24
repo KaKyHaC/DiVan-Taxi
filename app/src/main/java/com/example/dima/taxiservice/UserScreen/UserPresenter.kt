@@ -76,16 +76,17 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
         if(curMarker!=null&&tarMarker!=null) {
 //            val list = MyGoogleDirection().makeRequest(curMarker?.first.toString(), tarMarker?.first.toString())
 //            view.buildPolyline(list)
-            MyGoogleDirection().makeRequest(curMarker!!.first,tarMarker!!.first,object:DirectionCallback{
-                override fun onDirectionSuccess(direction: Direction?, rawBody: String?) {
-                    view.buildPolyline(PolyUtil.decode(rawBody))
-                }
 
-                override fun onDirectionFailure(t: Throwable?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-            })
+//            MyGoogleDirection().makeRequest(curMarker!!.first,tarMarker!!.first,object:DirectionCallback{
+//                override fun onDirectionSuccess(direction: Direction?, rawBody: String?) {
+//                    view.buildPolyline(PolyUtil.decode(rawBody))
+//                }
+//
+//                override fun onDirectionFailure(t: Throwable?) {
+//                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//                }
+//
+//            })
         }
     }
 
