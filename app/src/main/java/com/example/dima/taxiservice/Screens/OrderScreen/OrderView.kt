@@ -44,6 +44,7 @@ class OrderView: AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.uiSettings.isScrollGesturesEnabled=false
+        mMap.uiSettings.isZoomGesturesEnabled=false
 //        buildPolyline(List(2,{index -> LatLng(index*455f.toDouble(),index*32f.toDouble()) }))
     }
 

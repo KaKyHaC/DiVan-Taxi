@@ -20,6 +20,7 @@ interface IUserView: LoadingView,MapView, LocationFinder.Ifinder{
     fun setCurrentPlaceName(name:String)
     fun setTargetPlaceName(name:String)
     fun onOrderCreated(from:Pair<LatLng,Address>,to:Pair<LatLng,Address>)
+    fun setOrderCreateButtonEnabled(isEnable:Boolean)
 }
 interface IUserModel{
 
@@ -29,12 +30,13 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
     companion object {
         val curAddressRequest=123
         val tarAddressRequest=2
+        val zoom=15f
     }
+    internal var locationFinder: LocationFinder?=null
+    internal var addressAdapter: AddressAdapter?=null
 
     var curMarker:Pair<LatLng,Address>?=null
     var tarMarker:Pair<LatLng,Address>?=null
-    internal var locationFinder: LocationFinder?=null
-    internal var addressAdapter: AddressAdapter?=null
     init {
         try {
             val locationManager = view.getContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -44,6 +46,7 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
         }catch (e:Exception){
             print(e.toString())
         }
+        view.setOrderCreateButtonEnabled(tarMarker!=null&&curMarker!=null)
     }
 
     fun onMapClick(pos:LatLng){
@@ -55,6 +58,7 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
                 view.addMarker(location,address.featureName)
                 view.setTargetPlaceName(formatAddress(address))
                 tarMarker= Pair(location,address)
+                view.setOrderCreateButtonEnabled(tarMarker!=null&&curMarker!=null)
             }
         })
     }
@@ -83,7 +87,6 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
     private fun buildDirection(p1:LatLng,p2:LatLng){
 
     }
-    val zoom=15f
     override fun onAddressFinded(location: LatLng?, address: Address?, request: Int) {
         if (location!=null&&address!=null&&request== curAddressRequest) {
             curMarker=Pair(location,address)
@@ -91,13 +94,13 @@ class UserPresenter(val view:IUserView,val model: IUserModel) :LocationFinder.Lo
             view.setCurrentPlaceName(formatAddress(address))
             view.addMarker(location,address.featureName)
             locationFinder?.stopFinding()
+            view.setOrderCreateButtonEnabled(tarMarker!=null&&curMarker!=null)
         }
     }
 
     override fun onSatusChange(s: String?) {
 
     }
-
     override fun onLocationFinded(location: Location?) {
         if(location!=null)
             addressAdapter?.findAddress(LatLng(location.latitude,location.longitude), curAddressRequest)

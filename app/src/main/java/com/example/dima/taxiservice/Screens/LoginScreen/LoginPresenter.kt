@@ -29,16 +29,20 @@ class LoginPresenter (val view: ILoginView,val model: ILoginModel){
     }
     fun tryLogin(log:String,password:String){
         view.showLoading()
+        var isValid=true
         if(!isEmailValid(log)) {
-            ("not valid")
+            view.onLoginError("login must contain '@'")
             view.hideLoading()
-            return
+            isValid=false
         }
         if(!isPasswordValid(password)) {
-            view.onPasswordError("not valid")
+            view.onPasswordError("password length must be 4 or bigger symbol")
             view.hideLoading()
-            return
+            isValid=false
         }
+        if(!isValid)
+            return
+
         val res=model.tryLogin(log,password)
         res?.let {
             model.saveDataToAutoComplet(log,password)

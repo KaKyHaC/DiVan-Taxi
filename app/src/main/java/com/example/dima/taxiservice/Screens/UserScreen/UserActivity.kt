@@ -97,7 +97,6 @@ class UserActivity : AppCompatActivity() , OnMapReadyCallback,IUserView {
     override fun clearMap() {
         mMap.clear()
     }
-
     override fun buildPolyline(mPoints:List<LatLng>){
         val line = PolylineOptions()
         line.width(4f).color(R.color.material_deep_teal_200)
@@ -123,9 +122,14 @@ class UserActivity : AppCompatActivity() , OnMapReadyCallback,IUserView {
         val track = CameraUpdateFactory.newLatLngBounds(latLngBounds, size, size, 25)
         mMap.moveCamera(track)
     }
-
     override fun onOrderCreated(from: Pair<LatLng, Address>, to: Pair<LatLng, Address>) {
         startActivity(Intent(this,OrderView().javaClass))
+    }
+    override fun setOrderCreateButtonEnabled(isEnable: Boolean) {
+        if(isEnable)
+            bOrder.show()
+        else
+            bOrder.hide()
     }
 }
 
