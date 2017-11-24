@@ -18,59 +18,39 @@ import java.util.List;
 
 
 
-public class AddressAdapter implements LocationListener {
+public class AddressAdapter {
+    @FunctionalInterface
     public interface AddressListener {
-        enum Result{Success,Failed,}
-        void onAddressChange(LatLng location, Address address, Result result);
+        void onAddressFinded(LatLng location, Address address, int request);
     }
     Geocoder geocoder;
     AddressListener addressListener;
-    LocationFinder.StatusListener statusListener;
 
-    public AddressAdapter(LocationFinder.StatusListener statusListener, Geocoder geocoder, AddressListener addressListener) {
+    public AddressAdapter( Geocoder geocoder, AddressListener addressListener) {
         this.geocoder = geocoder;
         this.addressListener = addressListener;
-        this.statusListener=statusListener;
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        statusListener.onSatusChange("Location finded: "+location);
-        findAddress(new LatLng(location.getLatitude(),location.getLongitude()));
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
-    public void findAddress(LatLng location){
+    public void findAddress(LatLng location,int request,AddressListener listener){
         try {
-            statusListener.onSatusChange("start finding address");
+//            statusListener.onSatusChange("start finding address");
             List<Address> addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
 
             if (addresses != null) {
                 Address returnedAddress = addresses.get(0);
-                addressListener.onAddressChange(location,returnedAddress, AddressListener.Result.Success);
-                statusListener.onSatusChange("address finded");
+                listener.onAddressFinded(location,returnedAddress, request);
+//                statusListener.onSatusChange("address finded");
             } else {
-                addressListener.onAddressChange(location,null, AddressListener.Result.Failed);
-                statusListener.onSatusChange("address finding failed");
+                listener.onAddressFinded(location,null, request);
+//                statusListener.onSatusChange("address finding failed");
             }
         } catch (IOException e) {
-            addressListener.onAddressChange(location,null, AddressListener.Result.Failed);
-            statusListener.onSatusChange("address finding failed");
+            listener.onAddressFinded(location,null, request);
+//            statusListener.onSatusChange("address finding failed");
         }
+    }
+    public void findAddress(LatLng location,int request){
+        findAddress(location,request,addressListener);
     }
 }
 

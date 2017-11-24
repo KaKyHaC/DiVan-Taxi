@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        tools:context="com.example.dima.taxiservice.MainActivity" />
+        tools:context="com.example.dima.taxiservice.UserScreen.UserActivity" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -98,7 +98,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/bCreateOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"

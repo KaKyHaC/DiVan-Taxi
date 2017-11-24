@@ -4,8 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,27 +15,28 @@ import android.support.v7.app.AppCompatActivity;
  * Created by Dima on 17.10.2017.
  */
 
-public class LocationFinder {
-    public interface StatusListener {
+public class LocationFinder implements LocationListener {
+    public interface LocationFinderListener {
         void onSatusChange(String s);
+        void onLocationFinded(Location location);
     }
 
     private LocationManager locationManager;
     private int DELAY = 10;
-    private LocationListener locationListener;
-    private StatusListener statusListener;
+    private LocationFinderListener LocationFinderListener;
+    private int reuestCode;
 
-    public LocationFinder(StatusListener statusListener, LocationManager locationManager, LocationListener locationListener, int DELAY) {
+    public LocationFinder(LocationFinderListener LocationFinderListener, LocationManager locationManager,int request, int DELAY) {
         this.locationManager = locationManager;
         this.DELAY = DELAY;
-        this.locationListener = locationListener;
-        this.statusListener = statusListener;
+        this.LocationFinderListener = LocationFinderListener;
+        reuestCode=request;
     }
-
-    public LocationFinder(StatusListener statusListener, LocationManager locationManager, LocationListener locationListener) {
+    
+    public LocationFinder(LocationFinderListener LocationFinderListener, LocationManager locationManager,int request) {
         this.locationManager = locationManager;
-        this.locationListener = locationListener;
-        this.statusListener = statusListener;
+        this.LocationFinderListener = LocationFinderListener;
+        reuestCode=request;
     }
 
     public interface Ifinder{
@@ -42,7 +45,7 @@ public class LocationFinder {
     }
     //    @SuppressLint("MissingPermission")
     public void startFinding(Ifinder context) {
-        statusListener.onSatusChange("Start Finding");
+        LocationFinderListener.onSatusChange("Start Finding");
 
         if (ActivityCompat.checkSelfPermission(context.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -51,20 +54,19 @@ public class LocationFinder {
         }
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    1000 * DELAY, 10, locationListener);
+                    1000 * DELAY, 10, this);
             locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 1000 * DELAY, 10,
-                    locationListener);
+                    LocationManager.NETWORK_PROVIDER, 1000 * DELAY, 10, this);
         }catch (Exception e){
             System.out.print(e.toString());
         }
 
-        statusListener.onSatusChange(getStatus());
+        LocationFinderListener.onSatusChange(getStatus());
 
     }
 
     public void stopFinding() {
-        locationManager.removeUpdates(locationListener);
+        locationManager.removeUpdates(this);
     }
     private String getStatus(){
         return "GPS: "
@@ -73,5 +75,25 @@ public class LocationFinder {
                 +" NetWork: "
                 + locationManager
                 .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        LocationFinderListener.onLocationFinded(location);
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+        LocationFinderListener.onSatusChange(s);
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        LocationFinderListener.onSatusChange(s);
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        LocationFinderListener.onSatusChange(s);
     }
 }
