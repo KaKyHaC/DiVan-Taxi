@@ -20,6 +20,13 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.CameraUpdate
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.PolylineOptions
+
+
 
 class UserActivity : AppCompatActivity() , OnMapReadyCallback,IUserView {
     private lateinit var mMap: GoogleMap
@@ -95,6 +102,32 @@ class UserActivity : AppCompatActivity() , OnMapReadyCallback,IUserView {
     }
     override fun clearMap() {
         mMap.clear()
+    }
+
+    override fun buildPolyline(mPoints:List<LatLng>){
+        val line = PolylineOptions()
+        line.width(4f).color(R.color.material_deep_teal_200)
+        val latLngBuilder = LatLngBounds.Builder()
+        for (i in 0 until mPoints.size) {
+            if (i == 0) {
+                val startMarkerOptions = MarkerOptions()
+                        .position(mPoints.get(i))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.abc_btn_default_mtrl_shape))
+                mMap.addMarker(startMarkerOptions)
+            } else if (i == mPoints.size - 1) {
+                val endMarkerOptions = MarkerOptions()
+                        .position(mPoints.get(i))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.abc_list_focused_holo))
+                mMap.addMarker(endMarkerOptions)
+            }
+            line.add(mPoints.get(i))
+            latLngBuilder.include(mPoints.get(i))
+        }
+        mMap.addPolyline(line)
+        val size = resources.displayMetrics.widthPixels
+        val latLngBounds = latLngBuilder.build()
+        val track = CameraUpdateFactory.newLatLngBounds(latLngBounds, size, size, 25)
+        mMap.moveCamera(track)
     }
 }
 
